@@ -45,7 +45,7 @@ set rcvhostport = $dsthostport  # Pushing data to server
 set do_siftr = "1"
 
 # Set tcpdump (0 disabled, 1 enabled)
-set do_tcpdump = "0"
+set do_tcpdump = "1"
 
 echo "Loaded config for single path rysnc"
 echo "----"

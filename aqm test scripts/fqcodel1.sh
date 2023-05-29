@@ -45,7 +45,7 @@ set rcvhostport = $dsthostport  # Pushing data to server
 set do_siftr = "1"
 
 # Set tcpdump (0 disabled, 1 enabled)
-set do_tcpdump = "0"
+set do_tcpdump = "1"
 
 echo "Loaded config for single path rysnc"
 echo "----"
@@ -75,13 +75,13 @@ set vmhostaddr = "192.168.56.1"
 # ipfw add 100 queue 1 ip from any to any
 
 ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay"
-ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw sched 1 config pipe 1 type fq_pie"
+ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw sched 1 config pipe 1 type fq_codel ecn"
 ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw queue 1 config sched 1"
 ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw add 100 queue 1 ip from any to any"
 
 echo "Configuring DummynetVM2 for $vm2drate"
 ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay"
-ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw sched 1 config pipe 1 type fq_pie"
+ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw sched 1 config pipe 1 type fq_codel ecn"
 ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw queue 1 config sched 1"
 ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw add 100 queue 1 ip from any to any"
 
@@ -117,27 +117,29 @@ endif
 
 # initiate test
 echo "Starting iperf3 test"
-ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -1"
+# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -1"
 
-ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60"
-
-
-
-
-# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5101 -1"
-# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5102 -1"
-# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5103 -1"
-# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5104 -1"
+# ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60"
 
 
 
-# ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 10 -p 5101"
-# sleep 10
-# ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 10 -p 5102"
-# sleep 10
-# ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 10 -p 5103"
-# sleep 10
-# ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 10 -p 5104"
+
+# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5101 -1" >/dev/null &
+# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5102 -1" >/dev/null &
+# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5103 -1" >/dev/null &
+# ssh -p $dsthostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -s -p 5104 -1" >/dev/null &
+
+
+
+ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60 -p 5101" >/dev/null &
+sleep 10
+ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60 -p 5102" >/dev/null &
+sleep 10
+ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60 -p 5103" >/dev/null &
+sleep 10
+ssh -p $srchostport -i ~/.ssh/$sshkey root@$vmhostaddr "iperf3 -c 172.16.3.2 -t 60 -p 5104"
+
+sleep 100
 
 
 

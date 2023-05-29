@@ -45,7 +45,7 @@ set rcvhostport = $dsthostport  # Pushing data to server
 set do_siftr = "1"
 
 # Set tcpdump (0 disabled, 1 enabled)
-set do_tcpdump = "0"
+set do_tcpdump = "1"
 
 echo "Loaded config for single path rysnc"
 echo "----"
@@ -67,10 +67,10 @@ set vmhostaddr = "192.168.56.1"
 # WHat I need
 # ipfw pipe 1 config bw 10mbits/s delay 20ms codel
 echo "Configuring DummynetVM1 for $vm1drate"
-ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay pie target 20 tupdate 30ms max_burst 100ms noecn"
+ssh -p $router1port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay pie target 20 tupdate 30ms max_burst 100ms ecn"
 
 echo "Configuring DummynetVM2 for $vm2drate"
-ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay pie target 20 tupdate 30ms max_burst 100ms noecn"
+ssh -p $router2port -i ~/.ssh/$sshkey root@$vmhostaddr "ipfw pipe 1 config bw $vm1drate delay $vm1delay pie target 20 tupdate 30ms max_burst 100ms ecn"
 
 
 
