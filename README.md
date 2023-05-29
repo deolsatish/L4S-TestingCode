@@ -39,10 +39,10 @@ Before building the customized AQM kernel, you need to install the following sof
 
 ## Build virtual machines
 
-To build virtual machines for running the customized AQM kernel and the test suite. You can use [build vm script](./setup/VM_create.sh) in this repository, it uses [VboxManage](https://www.virtualbox.org/manual/ch08.html) command to create four virtual machines including two routers and two hosts for making TCP requests.
+To build virtual machines for running the customized AQM kernel and the test suite. You can use [build vm script](./setup/VM_create.sh) in this repository, it uses [VboxManage](https://www.virtualbox.org/manual/ch08.html) command to create four virtual machines including two routers and two hosts for making AQM requests.
 
 ```bash
-cd mptcp-dist/setup
+cd setup
 sh ./VM_create.sh <FreeBSD version 11 iso file>
 ```
 
@@ -72,7 +72,7 @@ The first step after FreeBSD version 11 is installed on the virtual machines is 
 3. Finally, you can use the [SSH key setup script](./setup/copy_keys.sh) to copy the SSH key from the host to the virtual machines. You can run the script by the following command:
 
    ```bash
-   cd mptcp-dist/setup
+   cd setup
    csh ./copy_keys.sh <host> <vm-username>
    ```
 
@@ -82,10 +82,10 @@ The first step after FreeBSD version 11 is installed on the virtual machines is 
 
 The next step is to copy the configuration files to the virtual machines including [rc.conf](<https://www.freebsd.org/cgi/man.cgi?rc.conf(5)>), [loader.conf](<https://www.freebsd.org/cgi/man.cgi?loader.conf(5)>), and [ipfw.rules](<https://www.freebsd.org/cgi/man.cgi?ipfw(8)>).
 
-Similarly, you can use the [configuration files setup script](./mptcp-dist/setup/copy_confs.sh) to copy the configuration files to the virtual machines. You can run the script by the following command:
+Similarly, you can use the [configuration files setup script](./setup/copy_confs.sh) to copy the configuration files to the virtual machines. You can run the script by the following command:
 
 ```bash
-cd mptcp-dist/setup
+cd setup
 csh ./copy_confs.sh
 ```
 
